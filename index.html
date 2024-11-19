@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="Spencience">
+<meta name="description" content="A simple snake game built with Phaser">
+<meta name="keywords" content="snake game, phaser, html5, tailwind css">
+<meta property="og:title" content="Spencience's Snake Game">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://example.com">
+<meta property="og:image" content="https://example.com/image.jpg">
+<title>Spencience's Snake Game</title>
+<link rel="icon" href="favicon.ico">
+<link rel="manifest" href="manifest.json">
+<script src="https://cdn.tailwindcss.com" integrity="sha256-E6Kj9eYทำ9CkqgtXp7SuBr(typeAdSq+Li+SmajDOc/l"></script>
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js" integrity="sha256-Zv0idzKSGVtJz9TXF+cNToK5yDj9yYddV8l3sO1omeo="></script>
+<style>
+        /* Custom styles */
+        .game-container {
+            width: 80%;
+            height: 80vh;
+            margin: 40px auto;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+<header class="bg-blue-500 text-white text-lg p-4">
+<nav class="container mx-auto flex justify-between items-center">
+<h1 class="text-2xl">Spencience's Snake Game</h1>
+<ul class="flex space-x-4">
+<li><a href="#" class="text-lg hover:text-gray-300">Home</a></li>
+<li><a href="#" class="text-lg hover:text-gray-300">About</a></li>
+<li><a href="#" class="text-lg hover:text-gray-300">Contact</a></li>
+</ul>
+</nav>
+</header>
+<main class="container mx-auto p-4">
+<section class="game-container">
+<canvas id="game-canvas"></canvas>
+<script>
+                // Initialize Phaser game
+                var config = {
+                    type: Phaser.AUTO,
+                    parent: 'game-container',
+                    width: 800,
+                    height: 600,
+                    scene: {
+                        preload: preload,
+                        create: create,
+                        update: update
+                    }
+                };
+
+                var game = new Phaser.Game(config);
+
+                function preload() {
+                    this.load.image('snake', 'assets/snake.png');
+                    this.load.image('food', 'assets/food.png');
+                }
+
+                function create() {
+                    this.snake = this.physics.add.sprite(400, 300, 'snake');
+                    this.food = this.physics.add.sprite(600, 300, 'food');
+                    this.score = 0;
+
+                    this.cursors = this.input.keyboard.createCursorKeys();
+                }
+
+                function update(time, delta) {
+                    if (this.cursors.left.isDown) {
+                        this.snake.body.setVelocityX(-100);
+                    } else if (this.cursors.right.isDown) {
+                        this.snake.body.setVelocityX(100);
+                    } else {
+                        this.snake.body.setVelocityX(0);
+                    }
+
+                    if (this.cursors.up.isDown) {
+                        this.snake.body.setVelocityY(-100);
+                    } else if (this.cursors.down.isDown) {
+                        this.snake.body.setVelocityY(100);
+                    } else {
+                        this.snake.body.setVelocityY(0);
+                    }
+
+                    // Snake collision with food
+                    if (Phaser.Math.Distance.BetweenPoints(this.snake, this.food) < 10) {
+                        this.score++;
+                        this.food.x = Phaser.Math.RND.integerInRange(0, 800);
+                        this.food.y = Phaser.Math.RND.integerInRange(0, 600);
+                    }
+                }
+            </script>
+</section>
+<section class="text-lg mt-8">
+<h2 class="text-2xl">Game instructions</h2>
+<p>Use the arrow keys to control the snake. Eat the food to score points.</p>
+</section>
+</main>
+<footer class="bg-blue-500 text-white text-lg p-4 mt-8">
